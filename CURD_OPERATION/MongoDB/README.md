@@ -1,6 +1,6 @@
-\#### A simple CRUD (Create, Read, Update, Delete) operation in Node.js with MongoDB typically involves using the Express framework for routing and Mongoose for interacting with the MongoDB database.
+#### A simple CRUD (Create, Read, Update, Delete) operation in Node.js with MongoDB typically involves using the Express framework for routing and Mongoose for interacting with the MongoDB database.
 
-\### 1. Project Setup:
+### 1. Project Setup:
 
 Initialize a new Node.js project.
 
@@ -26,7 +26,7 @@ Code
 
 ```
 
-\### 2. Database Connection (server.js or app.js):
+### 2. Database Connection (server.js or app.js):
 
 Connect to MongoDB using Mongoose. Replace YOUR\_MONGODB\_URI with your actual connection string (e.g., from MongoDB Atlas or a local instance).
 
@@ -76,7 +76,7 @@ JavaScript
 
 
 
-\### 3. Mongoose Schema and Model (models/Item.js):
+### 3. Mongoose Schema and Model (models/Item.js):
 
 Define a Mongoose schema for your data (e.g., an "Item").
 
@@ -108,7 +108,7 @@ JavaScript
 
 
 
-\### 4. Routes and Controllers (routes/items.js \& controllers/itemController.js):
+### 4. Routes and Controllers (routes/items.js \& controllers/itemController.js):
 
 
 
@@ -258,7 +258,7 @@ JavaScript
 
 
 
-\### 5. Integrate Routes (server.js or app.js):
+### 5. Integrate Routes (server.js or app.js):
 
 Use the item routes in your main application file.
 
