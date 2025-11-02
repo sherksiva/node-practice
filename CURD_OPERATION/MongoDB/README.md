@@ -8,11 +8,11 @@ Code
 
 ```
 
-&nbsp; mkdir my-crud-app
+ mkdir my-crud-app
 
-&nbsp; cd my-crud-app
+ cd my-crud-app
 
-&nbsp; npm init -y
+ npm init -y
 
 ```
 
@@ -22,7 +22,7 @@ Code
 
 ```
 
-&nbsp; npm install express mongoose dotenv
+ npm install express mongoose dotenv
 
 ```
 
@@ -36,41 +36,41 @@ JavaScript
 
 ```
 
-&nbsp; require('dotenv').config(); // For environment variables
+ require('dotenv').config(); // For environment variables
 
-&nbsp; const express = require('express');
+ const express = require('express');
 
-&nbsp; const mongoose = require('mongoose');
+ const mongoose = require('mongoose');
 
-&nbsp; const app = express();
+ const app = express();
 
-&nbsp; const PORT = process.env.PORT || 3000;
-
-
-
-&nbsp; app.use(express.json()); // Enable JSON body parsing
+ const PORT = process.env.PORT || 3000;
 
 
 
-&nbsp; mongoose.connect(process.env.MONGODB\_URI, {
-
-&nbsp;     useNewUrlParser: true,
-
-&nbsp;     useUnifiedTopology: true,
-
-&nbsp; })
-
-&nbsp; .then(() => console.log('MongoDB connected'))
-
-&nbsp; .catch(err => console.error('MongoDB connection error:', err));
+ app.use(express.json()); // Enable JSON body parsing
 
 
 
-&nbsp; app.listen(PORT, () => {
+ mongoose.connect(process.env.MONGODB\_URI, {
 
-&nbsp;     console.log(`Server running on port ${PORT}`);
+     useNewUrlParser: true,
 
-&nbsp; });
+     useUnifiedTopology: true,
+
+ })
+
+ .then(() => console.log('MongoDB connected'))
+
+ .catch(err => console.error('MongoDB connection error:', err));
+
+
+
+ app.listen(PORT, () => {
+
+     console.log(`Server running on port ${PORT}`);
+
+ });
 
 ```
 
@@ -83,26 +83,18 @@ Define a Mongoose schema for your data (e.g., an "Item").
 JavaScript
 
 ```
+ const mongoose = require('mongoose');
 
+ const itemSchema = new mongoose.Schema({
 
+     name: { type: String, required: true },
 
-&nbsp; const mongoose = require('mongoose');
+     description: String,
 
+     quantity: { type: Number, default: 0 },
 
-
-&nbsp; const itemSchema = new mongoose.Schema({
-
-&nbsp;     name: { type: String, required: true },
-
-&nbsp;     description: String,
-
-&nbsp;     quantity: { type: Number, default: 0 },
-
-&nbsp; });
-
-
-
-&nbsp; module.exports = mongoose.model('Item', itemSchema);
+ });
+ module.exports = mongoose.model('Item', itemSchema);
 
 ```
 
@@ -110,41 +102,35 @@ JavaScript
 
 ### 4. Routes and Controllers (routes/items.js \& controllers/itemController.js):
 
-
-
-
-
 Create routes to handle CRUD operations.
-
-
 
 JavaScript
 
 ```
 
-&nbsp; // routes/items.js
+ // routes/items.js
 
-&nbsp; const express = require('express');
+ const express = require('express');
 
-&nbsp; const router = express.Router();
+ const router = express.Router();
 
-&nbsp; const itemController = require('../controllers/itemController');
-
-
-
-&nbsp; router.post('/', itemController.createItem);
-
-&nbsp; router.get('/', itemController.getAllItems);
-
-&nbsp; router.get('/:id', itemController.getItemById);
-
-&nbsp; router.put('/:id', itemController.updateItem);
-
-&nbsp; router.delete('/:id', itemController.deleteItem);
+ const itemController = require('../controllers/itemController');
 
 
 
-&nbsp; module.exports = router;
+ router.post('/', itemController.createItem);
+
+ router.get('/', itemController.getAllItems);
+
+ router.get('/:id', itemController.getItemById);
+
+ router.put('/:id', itemController.updateItem);
+
+ router.delete('/:id', itemController.deleteItem);
+
+
+
+ module.exports = router;
 
 Implement the CRUD logic in a controller.
 
@@ -152,127 +138,123 @@ JavaScript
 
 
 
-&nbsp; // controllers/itemController.js
+ // controllers/itemController.js
 
-&nbsp; const Item = require('../models/Item');
-
-
-
-&nbsp; exports.createItem = async (req, res) => {
-
-&nbsp;     try {
-
-&nbsp;         const newItem = new Item(req.body);
-
-&nbsp;         await newItem.save();
-
-&nbsp;         res.status(201).json(newItem);
-
-&nbsp;     } catch (err) {
-
-&nbsp;         res.status(400).json({ message: err.message });
-
-&nbsp;     }
-
-&nbsp; };
+ const Item = require('../models/Item');
 
 
 
-&nbsp; exports.getAllItems = async (req, res) => {
+ exports.createItem = async (req, res) => {
 
-&nbsp;     try {
+     try {
 
-&nbsp;         const items = await Item.find();
+         const newItem = new Item(req.body);
 
-&nbsp;         res.json(items);
+         await newItem.save();
 
-&nbsp;     } catch (err) {
+         res.status(201).json(newItem);
 
-&nbsp;         res.status(500).json({ message: err.message });
+     } catch (err) {
 
-&nbsp;     }
+         res.status(400).json({ message: err.message });
 
-&nbsp; };
+     }
 
-
-
-&nbsp; exports.getItemById = async (req, res) => {
-
-&nbsp;     try {
-
-&nbsp;         const item = await Item.findById(req.params.id);
-
-&nbsp;         if (!item) return res.status(404).json({ message: 'Item not found' });
-
-&nbsp;         res.json(item);
-
-&nbsp;     } catch (err) {
-
-&nbsp;         res.status(500).json({ message: err.message });
-
-&nbsp;     }
-
-&nbsp; };
+ };
 
 
 
-&nbsp; exports.updateItem = async (req, res) => {
+ exports.getAllItems = async (req, res) => {
 
-&nbsp;     try {
+     try {
 
-&nbsp;         const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+         const items = await Item.find();
 
-&nbsp;         if (!updatedItem) return res.status(404).json({ message: 'Item not found' });
+         res.json(items);
 
-&nbsp;         res.json(updatedItem);
+     } catch (err) {
 
-&nbsp;     } catch (err) {
+         res.status(500).json({ message: err.message });
 
-&nbsp;         res.status(400).json({ message: err.message });
+     }
 
-&nbsp;     }
-
-&nbsp; };
+ };
 
 
 
-&nbsp; exports.deleteItem = async (req, res) => {
+ exports.getItemById = async (req, res) => {
 
-&nbsp;     try {
+     try {
 
-&nbsp;         const deletedItem = await Item.findByIdAndDelete(req.params.id);
+         const item = await Item.findById(req.params.id);
 
-&nbsp;         if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
+         if (!item) return res.status(404).json({ message: 'Item not found' });
 
-&nbsp;         res.json({ message: 'Item deleted' });
+         res.json(item);
 
-&nbsp;     } catch (err) {
+     } catch (err) {
 
-&nbsp;         res.status(500).json({ message: err.message });
+         res.status(500).json({ message: err.message });
 
-&nbsp;     }
+     }
 
-&nbsp; };
+ };
+
+
+
+ exports.updateItem = async (req, res) => {
+
+     try {
+
+         const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+         if (!updatedItem) return res.status(404).json({ message: 'Item not found' });
+
+         res.json(updatedItem);
+
+     } catch (err) {
+
+         res.status(400).json({ message: err.message });
+
+     }
+
+ };
+
+
+
+ exports.deleteItem = async (req, res) => {
+
+     try {
+
+         const deletedItem = await Item.findByIdAndDelete(req.params.id);
+
+         if (!deletedItem) return res.status(404).json({ message: 'Item not found' });
+
+         res.json({ message: 'Item deleted' });
+
+     } catch (err) {
+
+         res.status(500).json({ message: err.message });
+
+     }
+
+ };
 
 ```
-
-
-
 ### 5. Integrate Routes (server.js or app.js):
 
 Use the item routes in your main application file.
 
 JavaScript
-
 ```
 
-&nbsp; // ... (previous server.js code) ...
+ // ... (previous server.js code) ...
 
-&nbsp; const itemRoutes = require('./routes/items');
+ const itemRoutes = require('./routes/items');
 
-&nbsp; app.use('/api/items', itemRoutes); // Mount routes under /api/items
+ app.use('/api/items', itemRoutes); // Mount routes under /api/items
 
-&nbsp; // ... (rest of server.js code) ...
+ // ... (rest of server.js code) ...
 
 ```
 
